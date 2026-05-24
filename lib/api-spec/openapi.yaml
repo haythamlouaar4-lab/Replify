@@ -1,22 +1,32 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: VipGoPay API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: products
+    description: Product inventory management
+  - name: orders
+    description: Order management
+  - name: store
+    description: Store settings
+  - name: chat
+    description: AI chat
+  - name: notify
+    description: Notifications
+  - name: auth
+    description: OTP Authentication
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +34,284 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /products:
+    get:
+      operationId: getProducts
+      tags: [products]
+      summary: List all products
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      operationId: createProduct
+      tags: [products]
+      summary: Create a product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Created product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not found
+    put:
+      operationId: updateProduct
+      tags: [products]
+      summary: Update a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "200":
+          description: Updated product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    delete:
+      operationId: deleteProduct
+      tags: [products]
+      summary: Delete a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /products/{id}/stock:
+    patch:
+      operationId: updateProductStock
+      tags: [products]
+      summary: Update product stock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockUpdate"
+      responses:
+        "200":
+          description: Updated product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /orders:
+    get:
+      operationId: getOrders
+      tags: [orders]
+      summary: List all orders
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      operationId: createOrder
+      tags: [orders]
+      summary: Create an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+      responses:
+        "201":
+          description: Created order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  /orders/{id}/status:
+    patch:
+      operationId: updateOrderStatus
+      tags: [orders]
+      summary: Update order status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStatusUpdate"
+      responses:
+        "200":
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  /store-settings:
+    get:
+      operationId: getStoreSettings
+      tags: [store]
+      summary: Get store settings
+      responses:
+        "200":
+          description: Store settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreSettings"
+    put:
+      operationId: updateStoreSettings
+      tags: [store]
+      summary: Update store settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreSettings"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreSettings"
+
+  /chat:
+    post:
+      operationId: chat
+      tags: [chat]
+      summary: Send a chat message to AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: AI reply
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatReply"
+
+  /notify:
+    post:
+      operationId: sendNotification
+      tags: [notify]
+      summary: Send order notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotifyRequest"
+      responses:
+        "200":
+          description: Notification results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotifyResponse"
+
+  /auth/request-otp:
+    post:
+      operationId: requestOtp
+      tags: [auth]
+      summary: Request an OTP code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OtpRequest"
+      responses:
+        "200":
+          description: OTP sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OtpRequestResult"
+
+  /auth/verify-otp:
+    post:
+      operationId: verifyOtp
+      tags: [auth]
+      summary: Verify an OTP code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OtpVerify"
+      responses:
+        "200":
+          description: Verification result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OtpVerifyResult"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +319,249 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    Product:
+      type: object
+      required: [id, name, price, stock]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        cat:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        cond:
+          type: string
+        specs:
+          type: string
+
+    ProductInput:
+      type: object
+      required: [name, price]
+      properties:
+        name:
+          type: string
+        cat:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        cond:
+          type: string
+        specs:
+          type: string
+
+    StockUpdate:
+      type: object
+      required: [stock]
+      properties:
+        stock:
+          type: integer
+
+    CustomerInfo:
+      type: object
+      required: [name, phone, wilaya, commune]
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        wilaya:
+          type: string
+        commune:
+          type: string
+
+    Order:
+      type: object
+      required: [id, cust, product, productId, price, status, time]
+      properties:
+        id:
+          type: string
+        cust:
+          $ref: "#/components/schemas/CustomerInfo"
+        product:
+          type: string
+        productId:
+          type: integer
+        price:
+          type: number
+        status:
+          type: string
+        time:
+          type: string
+
+    OrderInput:
+      type: object
+      required: [id, cust, product, productId, price, status, time]
+      properties:
+        id:
+          type: string
+        cust:
+          $ref: "#/components/schemas/CustomerInfo"
+        product:
+          type: string
+        productId:
+          type: integer
+        price:
+          type: number
+        status:
+          type: string
+        time:
+          type: string
+
+    OrderStatusUpdate:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    WilayaRate:
+      type: object
+      required: [wilaya, office, home]
+      properties:
+        wilaya:
+          type: string
+        office:
+          type: string
+        home:
+          type: string
+
+    StoreSettings:
+      type: object
+      properties:
+        shopName:
+          type: string
+        shopType:
+          type: string
+        location:
+          type: string
+        hours:
+          type: string
+        officeDesk:
+          type: string
+        officeHome:
+          type: string
+        extra:
+          type: string
+        model:
+          type: string
+        email:
+          type: string
+        muteNotif:
+          type: boolean
+        wilayaRates:
+          type: array
+          items:
+            $ref: "#/components/schemas/WilayaRate"
+
+    ChatMessage:
+      type: object
+      required: [role, content]
+      properties:
+        role:
+          type: string
+        content:
+          type: string
+
+    ChatRequest:
+      type: object
+      required: [messages]
+      properties:
+        model:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatMessage"
+        storeConfig:
+          $ref: "#/components/schemas/StoreSettings"
+        productsList:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        customerInfo:
+          $ref: "#/components/schemas/CustomerInfo"
+
+    ChatReply:
+      type: object
+      required: [reply]
+      properties:
+        reply:
+          type: string
+
+    NotifyResult:
+      type: object
+      required: [channel, ok]
+      properties:
+        channel:
+          type: string
+        ok:
+          type: boolean
+        error:
+          type: ["string", "null"]
+
+    NotifyRequest:
+      type: object
+      required: [order]
+      properties:
+        order:
+          $ref: "#/components/schemas/Order"
+        integrations:
+          type: object
+          additionalProperties: true
+        customerEmail:
+          type: ["string", "null"]
+
+    NotifyResponse:
+      type: object
+      required: [results]
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/NotifyResult"
+        warning:
+          type: ["string", "null"]
+
+    OtpRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+
+    OtpRequestResult:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+        devCode:
+          type: ["string", "null"]
+        error:
+          type: ["string", "null"]
+
+    OtpVerify:
+      type: object
+      required: [email, code]
+      properties:
+        email:
+          type: string
+        code:
+          type: string
+
+    OtpVerifyResult:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+        error:
+          type: ["string", "null"]
