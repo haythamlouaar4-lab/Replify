@@ -1,6 +1,6 @@
-# VipGoPay 🎮
+# VipGoPay
 
-A full-stack Algerian gaming store management app. Store owners can manage inventory, chat with customers via AI (Gemini), process orders, configure real integrations (WhatsApp Business, Telegram, Instagram, Email), and track loyalty tiers.
+A full-stack Algerian e-commerce seller assistant app. Store owners can manage inventory, chat with customers via AI (Gemini), process orders, configure real integrations (WhatsApp Business, Telegram, Instagram, Email), and track loyalty tiers.
 
 ## Run & Operate
 

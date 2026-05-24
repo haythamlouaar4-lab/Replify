@@ -3,14 +3,14 @@ import { DZ_COMMUNES } from "./communes";
 import { sanitizeEmail, isBlockedDomain, isValidAlgerianPhone, getOrCreateUID, getTierForCount, getNextTier, tierProgressPct, TIERS } from "./utils/email";
 
 const WILAYAS = Object.keys(DZ_COMMUNES);
-const DEFAULT_ACCOUNTS = ["contact@vipgopay.com", "gamer.dz@gmail.com"];
+const DEFAULT_ACCOUNTS = ["contact@vipgopay.com"];
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const LANGS = {
   ar: {
     dir:"rtl" as const, name:"العربية",
-    nav:["📦 المخزون","💬 الشات","📋 الطلبيات","🎮 Gaming","⚙️ الإعدادات"],
-    loginTitle:"VipGoPay 🎮", loginSub:"منصة الجيمرز الجزائريين",
+    nav:["📦 المخزون","💬 الشات","📋 الطلبيات","📊 الإحصائيات","⚙️ الإعدادات"],
+    loginTitle:"VipGoPay", loginSub:"مساعد التجار الإلكترونيين الجزائريين",
     loginGoogleBtn:"تسجيل الدخول بـ Google",
     loginChooseAccount:"اختر حسابك", loginAddAccount:"➕ استخدام حساب آخر",
     loginVerifying:"جاري التحقق مع Google...", loginEnterEmail:"أدخل بريدك الإلكتروني",
@@ -26,7 +26,7 @@ const LANGS = {
     bulkTitle:"إضافة كمية للمخزون", bulkPh:"الكمية المراد إضافتها",
     chatStep1:"📦 بيانات المنتج التجريبي",
     chatDemoName:"اسم المنتج *", chatDemoPrice:"السعر (دج) *", chatDemoSpecs:"مواصفات / ملاحظات",
-    chatDemoNamePh:"مثال: PUBG Mobile UC 660", chatDemoPricePh:"مثال: 1500",
+    chatDemoNamePh:"مثال: هاتف سامسونج A15", chatDemoPricePh:"مثال: 45000",
     chatDemoRequired:"هذا الحقل مطلوب",
     chatDemoStart:"ابدأ التجربة ⚡", chatDemoReset:"↩ تغيير المنتج",
     chatWelcome:"أهلاً في", chatSub:"جرّب الذكاء الاصطناعي بالدارجة",
@@ -38,7 +38,7 @@ const LANGS = {
     product:"المنتج:", pending:"معلّق", confirmed:"مؤكد", cancelled:"ملغي",
     confirm:"✅ تأكيد", cancelOrder:"✕ إلغاء",
     exportCSV:"📥 CSV", copied:"✅ تم النسخ!", shareLabel:"تواصل:",
-    waMsg:"مرحبا {name}،\nطلبيتك {id} مسجّلة ✅\nالمنتج: {product}\nالسعر: {price} DZD\nالولاية: {wilaya}\nشكراً! 🎮",
+    waMsg:"مرحبا {name}،\nطلبيتك {id} مسجّلة ✅\nالمنتج: {product}\nالسعر: {price} DZD\nالولاية: {wilaya}\nشكراً!",
     filterAll:"الكل", filterPending:"معلّق", filterConfirmed:"مؤكد", filterCancelled:"ملغي",
     settingsTitle:"الإعدادات", shopName:"🏪 اسم المتجر",
     emailL:"📧 البريد الإلكتروني", shopType:"🗂️ نوع البضاعة",
@@ -87,24 +87,24 @@ const LANGS = {
     dashTitle:"📊 ملخص المبيعات", dashRevenue:"الإيرادات", dashOrders:"الطلبيات",
     dashTopProducts:"أكثر المنتجات طلباً", dashTopWilayas:"أكثر الولايات نشاطاً",
     notifLoading:"جاري الإرسال...", notifNoPlatforms:"⚠️ لا توجد منصات مُفعّلة",
-    gamingHub:"🎮 Gaming Hub",
-    gamingWalletTitle:"💰 محفظة VipGoPay",
+    gamingHub:"📊 الإحصائيات",
+    gamingWalletTitle:"💰 ملخص المالية",
     gamingRevenue:"إجمالي الإيرادات المؤكدة",
-    gamingPoints:"🎯 نقاط الولاء",
+    gamingPoints:"🏆 نقاط الولاء",
     gamingPointsRate:"نقطة واحدة لكل 100 دج",
     gamingTierTitle:"📊 مستوى المتجر",
     gamingMonthly:"طلبيات مؤكدة هذا الشهر",
     gamingNextTierLabel:"للوصول إلى المستوى التالي",
     gamingTierDiscount:"خصم على الشحن",
     gamingTierMaxed:"🏆 أعلى مستوى — الماسي!",
-    gamingQuickTitle:"⚡ شحن سريع (One-Click)",
+    gamingQuickTitle:"⚡ طلبيات سريعة (One-Click)",
     gamingAddShortcut:"+ إضافة اختصار",
-    gamingQuickName:"اسم اللعبة / الباقة",
-    gamingQuickGameId:"Game ID للاعب",
+    gamingQuickName:"اسم المنتج / الباقة",
+    gamingQuickGameId:"رقم مرجعي / ملاحظة",
     gamingQuickProduct:"المنتج المرتبط",
-    gamingRechargeBtn:"شحن الآن ⚡",
+    gamingRechargeBtn:"طلبية سريعة ⚡",
     gamingDeleteShortcut:"حذف",
-    gamingQuickModal:"تفاصيل الشحن السريع",
+    gamingQuickModal:"تفاصيل الطلبية السريعة",
     gamingQuickCustName:"اسم الزبون *",
     gamingQuickCustPhone:"الهاتف *",
     gamingQuickConfirm:"تأكيد الطلبية ⚡",
@@ -126,8 +126,8 @@ const LANGS = {
   },
   fr: {
     dir:"ltr" as const, name:"Français",
-    nav:["📦 Inventaire","💬 Chat","📋 Commandes","🎮 Gaming","⚙️ Paramètres"],
-    loginTitle:"VipGoPay 🎮", loginSub:"La plateforme des gamers algériens",
+    nav:["📦 Inventaire","💬 Chat","📋 Commandes","📊 Stats","⚙️ Paramètres"],
+    loginTitle:"VipGoPay", loginSub:"L'assistant des e-commerçants algériens",
     loginGoogleBtn:"Se connecter avec Google",
     loginChooseAccount:"Choisissez un compte", loginAddAccount:"➕ Autre compte",
     loginVerifying:"Vérification avec Google...", loginEnterEmail:"Entrez votre email",
@@ -143,7 +143,7 @@ const LANGS = {
     bulkTitle:"Ajouter du stock", bulkPh:"Quantité à ajouter",
     chatStep1:"📦 Produit à tester",
     chatDemoName:"Nom produit *", chatDemoPrice:"Prix (DZD) *", chatDemoSpecs:"Spécifications",
-    chatDemoNamePh:"Ex: PUBG Mobile UC 660", chatDemoPricePh:"Ex: 1500",
+    chatDemoNamePh:"Ex: Samsung Galaxy A15", chatDemoPricePh:"Ex: 45000",
     chatDemoRequired:"Champ requis",
     chatDemoStart:"Démarrer ⚡", chatDemoReset:"↩ Changer produit",
     chatWelcome:"Bienvenue chez", chatSub:"Testez l'IA en dialecte algérien",
@@ -155,7 +155,7 @@ const LANGS = {
     product:"Produit:", pending:"En attente", confirmed:"Confirmé", cancelled:"Annulé",
     confirm:"✅ Confirmer", cancelOrder:"✕ Annuler",
     exportCSV:"📥 CSV", copied:"✅ Copié!", shareLabel:"Contact:",
-    waMsg:"Bonjour {name},\nCommande {id} ✅\nProduit: {product}\nPrix: {price} DZD\nWilaya: {wilaya}\nMerci! 🎮",
+    waMsg:"Bonjour {name},\nCommande {id} ✅\nProduit: {product}\nPrix: {price} DZD\nWilaya: {wilaya}\nMerci!",
     filterAll:"Tout", filterPending:"En attente", filterConfirmed:"Confirmé", filterCancelled:"Annulé",
     settingsTitle:"Paramètres", shopName:"🏪 Nom boutique",
     emailL:"📧 Email", shopType:"🗂️ Type produits",
@@ -203,24 +203,24 @@ const LANGS = {
     dashTitle:"📊 Résumé", dashRevenue:"Revenus", dashOrders:"Commandes",
     dashTopProducts:"Top produits", dashTopWilayas:"Top wilayas",
     notifLoading:"Envoi...", notifNoPlatforms:"⚠️ Aucune plateforme",
-    gamingHub:"🎮 Gaming Hub",
-    gamingWalletTitle:"💰 Portefeuille VipGoPay",
+    gamingHub:"📊 Statistiques",
+    gamingWalletTitle:"💰 Résumé financier",
     gamingRevenue:"Revenus confirmés totaux",
-    gamingPoints:"🎯 Points fidélité",
+    gamingPoints:"🏆 Points fidélité",
     gamingPointsRate:"1 point / 100 DZD",
     gamingTierTitle:"📊 Niveau boutique",
     gamingMonthly:"Commandes confirmées ce mois",
     gamingNextTierLabel:"Pour atteindre le niveau suivant",
     gamingTierDiscount:"réduction livraison",
     gamingTierMaxed:"🏆 Niveau maximum — Diamant!",
-    gamingQuickTitle:"⚡ Recharge rapide (One-Click)",
+    gamingQuickTitle:"⚡ Commandes rapides (One-Click)",
     gamingAddShortcut:"+ Ajouter raccourci",
-    gamingQuickName:"Nom jeu / package",
-    gamingQuickGameId:"Game ID joueur",
+    gamingQuickName:"Nom produit / package",
+    gamingQuickGameId:"Référence / note",
     gamingQuickProduct:"Produit lié",
-    gamingRechargeBtn:"Recharger ⚡",
+    gamingRechargeBtn:"Commander ⚡",
     gamingDeleteShortcut:"Supprimer",
-    gamingQuickModal:"Détails recharge rapide",
+    gamingQuickModal:"Détails commande rapide",
     gamingQuickCustName:"Nom client *",
     gamingQuickCustPhone:"Téléphone *",
     gamingQuickConfirm:"Confirmer ⚡",
@@ -242,8 +242,8 @@ const LANGS = {
   },
   en: {
     dir:"ltr" as const, name:"English",
-    nav:["📦 Inventory","💬 Chat","📋 Orders","🎮 Gaming","⚙️ Settings"],
-    loginTitle:"VipGoPay 🎮", loginSub:"The Algerian Gamers Platform",
+    nav:["📦 Inventory","💬 Chat","📋 Orders","📊 Analytics","⚙️ Settings"],
+    loginTitle:"VipGoPay", loginSub:"The Algerian E-commerce Assistant",
     loginGoogleBtn:"Sign in with Google",
     loginChooseAccount:"Choose an account", loginAddAccount:"➕ Use another account",
     loginVerifying:"Verifying with Google...", loginEnterEmail:"Enter your email",
@@ -259,7 +259,7 @@ const LANGS = {
     bulkTitle:"Add Bulk Stock", bulkPh:"Quantity to add",
     chatStep1:"📦 Product to Test",
     chatDemoName:"Product Name *", chatDemoPrice:"Price (DZD) *", chatDemoSpecs:"Specs / Notes",
-    chatDemoNamePh:"e.g. PUBG Mobile UC 660", chatDemoPricePh:"e.g. 1500",
+    chatDemoNamePh:"e.g. Samsung Galaxy A15", chatDemoPricePh:"e.g. 45000",
     chatDemoRequired:"This field is required",
     chatDemoStart:"Start Testing ⚡", chatDemoReset:"↩ Change Product",
     chatWelcome:"Welcome to", chatSub:"Test the AI in Algerian Darja",
@@ -271,7 +271,7 @@ const LANGS = {
     product:"Product:", pending:"Pending", confirmed:"Confirmed", cancelled:"Cancelled",
     confirm:"✅ Confirm", cancelOrder:"✕ Cancel",
     exportCSV:"📥 CSV", copied:"✅ Copied!", shareLabel:"Contact:",
-    waMsg:"Hello {name},\nOrder {id} confirmed ✅\nProduct: {product}\nPrice: {price} DZD\nWilaya: {wilaya}\nThank you! 🎮",
+    waMsg:"Hello {name},\nOrder {id} confirmed ✅\nProduct: {product}\nPrice: {price} DZD\nWilaya: {wilaya}\nThank you!",
     filterAll:"All", filterPending:"Pending", filterConfirmed:"Confirmed", filterCancelled:"Cancelled",
     settingsTitle:"Settings", shopName:"🏪 Store Name",
     emailL:"📧 Email", shopType:"🗂️ Product Type",
@@ -319,24 +319,24 @@ const LANGS = {
     dashTitle:"📊 Sales Summary", dashRevenue:"Revenue", dashOrders:"Orders",
     dashTopProducts:"Top Products", dashTopWilayas:"Top Wilayas",
     notifLoading:"Sending...", notifNoPlatforms:"⚠️ No platforms configured",
-    gamingHub:"🎮 Gaming Hub",
-    gamingWalletTitle:"💰 VipGoPay Wallet",
+    gamingHub:"📊 Analytics",
+    gamingWalletTitle:"💰 Financial Summary",
     gamingRevenue:"Total confirmed revenue",
-    gamingPoints:"🎯 Loyalty Points",
+    gamingPoints:"🏆 Loyalty Points",
     gamingPointsRate:"1 point per 100 DZD",
-    gamingTierTitle:"📊 Store Tier",
+    gamingTierTitle:"📊 Store Level",
     gamingMonthly:"Confirmed orders this month",
-    gamingNextTierLabel:"To reach the next tier",
+    gamingNextTierLabel:"To reach the next level",
     gamingTierDiscount:"shipping discount",
     gamingTierMaxed:"🏆 Max level — Diamond!",
-    gamingQuickTitle:"⚡ Quick Recharge (One-Click)",
+    gamingQuickTitle:"⚡ Quick Orders (One-Click)",
     gamingAddShortcut:"+ Add Shortcut",
-    gamingQuickName:"Game / Package Name",
-    gamingQuickGameId:"Player Game ID",
+    gamingQuickName:"Product / Package Name",
+    gamingQuickGameId:"Reference / Note",
     gamingQuickProduct:"Linked Product",
-    gamingRechargeBtn:"Recharge ⚡",
+    gamingRechargeBtn:"Quick Order ⚡",
     gamingDeleteShortcut:"Delete",
-    gamingQuickModal:"Quick Recharge Details",
+    gamingQuickModal:"Quick Order Details",
     gamingQuickCustName:"Customer Name *",
     gamingQuickCustPhone:"Phone *",
     gamingQuickConfirm:"Confirm Order ⚡",
@@ -384,7 +384,7 @@ const THEMES={
   dark:{bg:'#05071a',surf:'#0a0d1f',surf2:'#0f1428',border:'#1a2040',acc:'#06d6f5',acc2:'#8b5cf6',text:'#e8eeff',muted:'#3d4f7a',sub:'#7a8fc4',ok:'#10b981',warn:'#f59e0b',err:'#ef4444',head:'#07090f'},
   light:{bg:'#f0f4ff',surf:'#ffffff',surf2:'#f5f7ff',border:'#dde4f5',acc:'#0284c7',acc2:'#7c3aed',text:'#0f172a',muted:'#94a3b8',sub:'#64748b',ok:'#059669',warn:'#d97706',err:'#dc2626',head:'#ffffff'}
 };
-const ES:Config={shopName:'VipGoPay',shopType:'Gaming / شحن ألعاب',location:'الجزائر',hours:'9:00-22:00',officeDesk:'400',officeHome:'600',extra:'',model:'gemini-2.5-flash',email:'',muteNotif:false,wilayaRates:[]};
+const ES:Config={shopName:'VipGoPay',shopType:'إلكترونيات',location:'الجزائر',hours:'9:00-22:00',officeDesk:'400',officeHome:'600',extra:'',model:'gemini-2.5-flash',email:'',muteNotif:false,wilayaRates:[]};
 const EI:IntegConfig={wa:{phoneNumberId:'',accessToken:'',phoneNumber:''},tg:{botToken:'',chatId:''},ig:{accountId:'',accessToken:'',email:'',recipientId:'',pageType:'Business Page'},emailSvc:{service:'resend',apiKey:'',senderEmail:'',senderName:''}};
 
 const GoogleG=()=><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>;
@@ -472,7 +472,7 @@ export default function App(){
       )}
       <div style={{width:'100%',maxWidth:400}}>
         <div style={{textAlign:'center',marginBottom:32}}>
-          <div style={{width:80,height:80,background:`linear-gradient(135deg,${th.acc},${th.acc2})`,borderRadius:22,display:'flex',alignItems:'center',justifyContent:'center',fontSize:42,margin:'0 auto 16px',boxShadow:`0 0 32px ${th.acc}44`}}>🎮</div>
+          <div style={{width:80,height:80,background:`linear-gradient(135deg,${th.acc},${th.acc2})`,borderRadius:22,display:'flex',alignItems:'center',justifyContent:'center',fontSize:42,margin:'0 auto 16px',boxShadow:`0 0 32px ${th.acc}44`}}>🛍️</div>
           <div style={{fontSize:28,fontWeight:900,color:th.text,marginBottom:4,letterSpacing:-0.5}}>{T.loginTitle}</div>
           <div style={{color:th.muted,fontSize:14}}>{T.loginSub}</div>
         </div>
@@ -601,7 +601,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
   const startChat=()=>{
     if(!demoProduct.name.trim()){setDemoErr(T.chatDemoRequired);return;}
     if(!demoProduct.price.trim()||isNaN(Number(demoProduct.price))){setDemoErr(T.chatDemoRequired);return;}
-    const intro=`مرحباً! 🎮🔥\nأنا المساعد ديال ${cfg.shopName}\nقدّاملي:\n📦 ${demoProduct.name}\n💰 ${Number(demoProduct.price).toLocaleString()} DZD${demoProduct.specs?`\n📝 ${demoProduct.specs}`:''}\nواش تحب تعرف؟`;
+    const intro=`مرحباً! 👋\nأنا المساعد ديال ${cfg.shopName}\nقدّاملي:\n📦 ${demoProduct.name}\n💰 ${Number(demoProduct.price).toLocaleString()} DZD${demoProduct.specs?`\n📝 ${demoProduct.specs}`:''}\nواش تحب تعرف؟`;
     setMsgs([{role:'assistant',content:intro,time:nowT()}]);
     setChatStep('chat');setDemoErr('');
   };
@@ -687,7 +687,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
   const testSend=async()=>{
     if(!hasAnyCreds()){setEmptyCredsErr(true);setTimeout(()=>setEmptyCredsErr(false),4000);return;}
     setTestLoading(true);
-    const testOrder:Order={id:'TEST-001',cust:{name:'زبون اختبار',phone:'0550000000',wilaya:'الجزائر',commune:''},product:'Test Gaming Card 🎮',productId:0,price:500,status:'confirmed',time:new Date().toLocaleString()};
+    const testOrder:Order={id:'TEST-001',cust:{name:'زبون اختبار',phone:'0550000000',wilaya:'الجزائر',commune:''},product:'Test Product',productId:0,price:500,status:'confirmed',time:new Date().toLocaleString()};
     await sendNotifications(testOrder);setTestLoading(false);
   };
   const isConn=(key:keyof IntegConfig)=>{const v=integCfg[key] as Record<string,string>;return Object.values(v).some(x=>x.trim().length>0);};
@@ -759,7 +759,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
               <h3 style={{margin:'0 0 4px',color:th.text}}>{T.gamingQuickModal}</h3>
               <div style={{background:th.surf2,borderRadius:10,padding:'10px 12px',marginBottom:16}}>
                 <div style={{color:th.acc,fontWeight:700}}>{quickModal.gameName}</div>
-                {quickModal.gameId&&<div style={{color:th.muted,fontSize:12}}>Game ID: {quickModal.gameId}</div>}
+                {quickModal.gameId&&<div style={{color:th.muted,fontSize:12}}>Réf: {quickModal.gameId}</div>}
                 {quickModal.productName&&<div style={{color:th.muted,fontSize:12}}>{quickModal.productName}</div>}
               </div>
               <div style={{marginBottom:10}}><label style={LB}>{T.gamingQuickCustName}</label><input value={quickCust.name} onChange={e=>{setQuickCust(c=>({...c,name:e.target.value}));setQuickCustErr('');}} style={I(!!quickCustErr&&!quickCust.name.trim())}/></div>
@@ -775,7 +775,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
       {/* Header */}
       <div style={{background:th.head,borderBottom:`1px solid ${th.border}`,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:50,backdropFilter:'blur(8px)'}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <div style={{width:36,height:36,background:`linear-gradient(135deg,${th.acc},${th.acc2})`,borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,boxShadow:`0 0 16px ${th.acc}44`}}>🎮</div>
+          <div style={{width:36,height:36,background:`linear-gradient(135deg,${th.acc},${th.acc2})`,borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,boxShadow:`0 0 16px ${th.acc}44`}}>🛍️</div>
           <div><div style={{fontWeight:800,fontSize:15,color:th.text}}>{cfg.shopName}</div><div style={{fontSize:9,color:th.acc,fontWeight:600,letterSpacing:1}}>VIPGOPAY PRO</div></div>
         </div>
         <div style={{display:'flex',gap:5,alignItems:'center'}}>
@@ -876,7 +876,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
               </div>
               <div style={{marginBottom:14}}>
                 <label style={LB}>{T.chatDemoSpecs}</label>
-                <input placeholder="مثال: 660 UC، يصلح لكل الأجهزة" value={demoProduct.specs} onChange={e=>setDemoProduct(p=>({...p,specs:e.target.value}))} style={I(false)} onKeyDown={e=>e.key==='Enter'&&startChat()}/>
+                <input placeholder="مثال: لون أسود، ضمان سنة، توصيل سريع" value={demoProduct.specs} onChange={e=>setDemoProduct(p=>({...p,specs:e.target.value}))} style={I(false)} onKeyDown={e=>e.key==='Enter'&&startChat()}/>
               </div>
               {demoErr&&<div style={{background:`${th.err}15`,border:`1px solid ${th.err}33`,borderRadius:9,padding:'9px 12px',color:th.err,fontSize:13,marginBottom:12}}>⚠ {demoErr}</div>}
               <button onClick={startChat} style={{...BTN('primary'),width:'100%',padding:13,fontSize:15}}>{T.chatDemoStart}</button>
@@ -1105,7 +1105,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
               <div style={{width:44,height:44,borderRadius:'50%',background:avatarColor(email),display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,fontWeight:800,color:'#fff',flexShrink:0,boxShadow:`0 0 16px ${avatarColor(email)}66`}}>{email[0]?.toUpperCase()}</div>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{color:th.text,fontWeight:700,fontSize:14,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{email}</div>
-                <div style={{color:th.muted,fontSize:10,marginTop:2}}>VipGoPay Pro 🎮 • {T.uidLabel}: <code style={{color:th.acc,fontSize:9}}>{uid}</code></div>
+                <div style={{color:th.muted,fontSize:10,marginTop:2}}>VipGoPay Pro • {T.uidLabel}: <code style={{color:th.acc,fontSize:9}}>{uid}</code></div>
               </div>
             </div>
           </div>
