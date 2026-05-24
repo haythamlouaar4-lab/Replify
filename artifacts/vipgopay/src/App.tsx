@@ -24,14 +24,12 @@ const LANGS = {
     outOfStock:"نافد", qty:"الكمية:",
     totalP:"المنتجات", availP:"متاح", outP:"نافد",
     bulkTitle:"إضافة كمية للمخزون", bulkPh:"الكمية المراد إضافتها",
-    chatStep1:"👤 معلومات الزبون",
-    chatCustName:"اسم الزبون *", chatCustPhone:"الهاتف *",
-    chatCustWilaya:"الولاية *", chatCustCommune:"البلدية",
-    chatCustPhonePh:"05XXXXXXXX أو 06XXXXXXXX",
-    chatCustPhoneErr:"هاتف غير صحيح (10 أرقام، يبدأ بـ 05/06/07)",
-    chatCustRequired:"هذا الحقل مطلوب",
-    chatCustStart:"ابدأ المحادثة ⚡", chatCustReset:"↩ تغيير الزبون",
-    chatWelcome:"أهلاً في", chatSub:"تحدث مع الذكاء الاصطناعي بالدارجة",
+    chatStep1:"📦 بيانات المنتج التجريبي",
+    chatDemoName:"اسم المنتج *", chatDemoPrice:"السعر (دج) *", chatDemoSpecs:"مواصفات / ملاحظات",
+    chatDemoNamePh:"مثال: PUBG Mobile UC 660", chatDemoPricePh:"مثال: 1500",
+    chatDemoRequired:"هذا الحقل مطلوب",
+    chatDemoStart:"ابدأ التجربة ⚡", chatDemoReset:"↩ تغيير المنتج",
+    chatWelcome:"أهلاً في", chatSub:"جرّب الذكاء الاصطناعي بالدارجة",
     startBtn:"ابدأ ⚡", newChat:"↩ جديد",
     inputPh:"اكتب رسالتك...", active:"● نشط",
     logoutBtn:"تسجيل الخروج 🚪", logoutQ:"هل تريد تسجيل الخروج؟",
@@ -143,14 +141,12 @@ const LANGS = {
     outOfStock:"Rupture", qty:"Qté:",
     totalP:"Produits", availP:"Disponible", outP:"Rupture",
     bulkTitle:"Ajouter du stock", bulkPh:"Quantité à ajouter",
-    chatStep1:"👤 Infos client",
-    chatCustName:"Nom client *", chatCustPhone:"Téléphone *",
-    chatCustWilaya:"Wilaya *", chatCustCommune:"Commune",
-    chatCustPhonePh:"05XXXXXXXX ou 06XXXXXXXX",
-    chatCustPhoneErr:"Tél. invalide (10 chiffres, commence par 05/06/07)",
-    chatCustRequired:"Champ requis",
-    chatCustStart:"Démarrer ⚡", chatCustReset:"↩ Changer client",
-    chatWelcome:"Bienvenue chez", chatSub:"IA en dialecte algérien",
+    chatStep1:"📦 Produit à tester",
+    chatDemoName:"Nom produit *", chatDemoPrice:"Prix (DZD) *", chatDemoSpecs:"Spécifications",
+    chatDemoNamePh:"Ex: PUBG Mobile UC 660", chatDemoPricePh:"Ex: 1500",
+    chatDemoRequired:"Champ requis",
+    chatDemoStart:"Démarrer ⚡", chatDemoReset:"↩ Changer produit",
+    chatWelcome:"Bienvenue chez", chatSub:"Testez l'IA en dialecte algérien",
     startBtn:"Démarrer ⚡", newChat:"↩ Nouveau",
     inputPh:"Écrivez votre message...", active:"● Actif",
     logoutBtn:"Déconnexion 🚪", logoutQ:"Se déconnecter?",
@@ -261,14 +257,12 @@ const LANGS = {
     outOfStock:"Out of Stock", qty:"Qty:",
     totalP:"Products", availP:"Available", outP:"Out of Stock",
     bulkTitle:"Add Bulk Stock", bulkPh:"Quantity to add",
-    chatStep1:"👤 Customer Info",
-    chatCustName:"Customer Name *", chatCustPhone:"Phone *",
-    chatCustWilaya:"Wilaya *", chatCustCommune:"Commune",
-    chatCustPhonePh:"05XXXXXXXX or 06XXXXXXXX",
-    chatCustPhoneErr:"Invalid phone (10 digits, starts with 05/06/07)",
-    chatCustRequired:"This field is required",
-    chatCustStart:"Start Chat ⚡", chatCustReset:"↩ Change Customer",
-    chatWelcome:"Welcome to", chatSub:"AI chat in Algerian Darja",
+    chatStep1:"📦 Product to Test",
+    chatDemoName:"Product Name *", chatDemoPrice:"Price (DZD) *", chatDemoSpecs:"Specs / Notes",
+    chatDemoNamePh:"e.g. PUBG Mobile UC 660", chatDemoPricePh:"e.g. 1500",
+    chatDemoRequired:"This field is required",
+    chatDemoStart:"Start Testing ⚡", chatDemoReset:"↩ Change Product",
+    chatWelcome:"Welcome to", chatSub:"Test the AI in Algerian Darja",
     startBtn:"Start ⚡", newChat:"↩ New",
     inputPh:"Type your message...", active:"● Active",
     logoutBtn:"Logout 🚪", logoutQ:"Logout?",
@@ -520,9 +514,9 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
   const [bulk,setBulk]=useState<number|null>(null);
   const [bulkQ,setBulkQ]=useState('');
 
-  const [chatStep,setChatStep]=useState<'customer'|'chat'>('customer');
-  const [customerInfo,setCustomerInfo]=useState<CustomerInfo>({name:'',phone:'',wilaya:'',commune:''});
-  const [customerErr,setCustomerErr]=useState('');
+  const [chatStep,setChatStep]=useState<'product'|'chat'>('product');
+  const [demoProduct,setDemoProduct]=useState({name:'',price:'',specs:''});
+  const [demoErr,setDemoErr]=useState('');
   const [msgs,setMsgs]=useState<Msg[]>([]);
   const [inp,setInp]=useState('');
   const [aiLoading,setAiLoading]=useState(false);
@@ -604,39 +598,24 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
   };
   const fProds=prods.filter(p=>p.name.toLowerCase().includes(search.toLowerCase())||(p.cat||'').toLowerCase().includes(search.toLowerCase()));
 
-  const validateCustomer=():string|null=>{
-    if(!customerInfo.name.trim())return T.chatCustRequired;
-    if(!isValidAlgerianPhone(customerInfo.phone))return T.chatCustPhoneErr;
-    if(!customerInfo.wilaya)return T.chatCustRequired;
-    return null;
-  };
   const startChat=()=>{
-    const err=validateCustomer();if(err){setCustomerErr(err);return;}
-    setMsgs([{role:'assistant',content:`مرحباً ${customerInfo.name} خو! 🎮🔥\nأنا المساعد ديال ${cfg.shopName}\nراك من ${customerInfo.wilaya}${customerInfo.commune?` / ${customerInfo.commune}`:''} — نخدموك بالأحسن! 💪\nواش تحب تعرف؟`,time:nowT()}]);
-    setChatStep('chat');setCustomerErr('');
+    if(!demoProduct.name.trim()){setDemoErr(T.chatDemoRequired);return;}
+    if(!demoProduct.price.trim()||isNaN(Number(demoProduct.price))){setDemoErr(T.chatDemoRequired);return;}
+    const intro=`مرحباً! 🎮🔥\nأنا المساعد ديال ${cfg.shopName}\nقدّاملي:\n📦 ${demoProduct.name}\n💰 ${Number(demoProduct.price).toLocaleString()} DZD${demoProduct.specs?`\n📝 ${demoProduct.specs}`:''}\nواش تحب تعرف؟`;
+    setMsgs([{role:'assistant',content:intro,time:nowT()}]);
+    setChatStep('chat');setDemoErr('');
   };
   const send=async()=>{
     if(!inp.trim()||aiLoading)return;
     const um:Msg={role:'user',content:inp.trim(),time:nowT()};
     const upd=[...msgs,um];setMsgs(upd);setInp('');setAiLoading(true);
     try{
-      const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:cfg.model,messages:upd.map(m=>({role:m.role,content:m.content})),storeConfig:cfg,productsList:prods,customerInfo})});
+      const demoProd=[{id:0,name:demoProduct.name,price:Number(demoProduct.price),stock:99,cond:'',specs:demoProduct.specs}];
+      const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:cfg.model,messages:upd.map(m=>({role:m.role,content:m.content})),storeConfig:cfg,productsList:prods.length>0?prods:demoProd})});
       if(!r.ok)throw new Error(`HTTP ${r.status}`);
       const d=await r.json();const raw:string=d.reply||'';
-      const jm=raw.match(/%%JSON\s*(\{.*?\})\s*%%/s);
-      let meta:{order:boolean;productId?:number|null}={order:false};
-      if(jm){try{meta=JSON.parse(jm[1]);}catch{}}
       const clean=raw.replace(/%%JSON\s*\{.*?\}\s*%%/gs,'').trim();
       setMsgs([...upd,{role:'assistant',content:clean||'واش تحب تعرف؟',time:nowT()}]);
-      if(meta.order&&meta.productId){
-        const mp=prods.find(p=>Number(p.id)===Number(meta.productId));
-        if(mp&&mp.stock>0){
-          const o:Order={id:`ORD-${Date.now()}`,cust:{...customerInfo},product:mp.name,productId:mp.id,price:mp.price,status:'pending',time:new Date().toLocaleString()};
-          fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)}).then(r=>r.json()).then(s=>{setOrders(p=>[s as Order,...p]);}).catch(()=>{setOrders(p=>[o,...p]);});
-          setBanner(o);setTimeout(()=>setBanner(null),5000);sendNotif('🛒 '+T.notifNewOrder,mp.name);
-          setProds(p=>p.map(x=>x.id===mp.id?{...x,stock:Math.max(0,x.stock-1)}:x));
-        }
-      }
     }catch(err){setMsgs(p=>[...p,{role:'assistant',content:'⚠️ خطأ: '+(err instanceof Error?err.message:'Unknown'),time:''}]);}
     setAiLoading(false);
   };
@@ -880,49 +859,36 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
 
         {/* TAB 1: CHAT */}
         {tab===1&&<div>
-          {chatStep==='customer'?<div>
+          {chatStep==='product'?<div>
             <div style={{textAlign:'center',marginBottom:16}}>
               <div style={{fontSize:44,filter:`drop-shadow(0 0 12px ${th.acc}88)`,marginBottom:8}}>💬</div>
               <div style={{fontSize:17,fontWeight:800,color:th.text}}>{T.chatStep1}</div>
               <div style={{color:th.muted,fontSize:12,marginTop:4}}>{T.chatSub}</div>
             </div>
             <div style={CARD}>
-              {([
-                [T.chatCustName,'name','text',T.chatCustName,false] as const,
-                [T.chatCustPhone,'phone','tel',T.chatCustPhonePh,false] as const,
-              ]).map(([label,key,type,ph])=>(
-                <div key={key} style={{marginBottom:12}}>
-                  <label style={LB}>{label}</label>
-                  <input type={type} placeholder={ph} value={customerInfo[key as 'name'|'phone']} onChange={e=>{setCustomerInfo(c=>({...c,[key]:e.target.value}));setCustomerErr('');}} style={I(false)}/>
-                </div>
-              ))}
               <div style={{marginBottom:12}}>
-                <label style={LB}>{T.chatCustWilaya}</label>
-                <select value={customerInfo.wilaya} onChange={e=>{setCustomerInfo(c=>({...c,wilaya:e.target.value,commune:''}));setCustomerErr('');}} style={I(false)}>
-                  <option value="">{T.chatCustWilaya}</option>
-                  {WILAYAS.map(w=><option key={w}>{w}</option>)}
-                </select>
+                <label style={LB}>{T.chatDemoName}</label>
+                <input placeholder={T.chatDemoNamePh} value={demoProduct.name} onChange={e=>{setDemoProduct(p=>({...p,name:e.target.value}));setDemoErr('');}} style={I(!!demoErr&&!demoProduct.name.trim())} onKeyDown={e=>e.key==='Enter'&&startChat()}/>
               </div>
-              {customerInfo.wilaya&&(DZ_COMMUNES as Record<string,string[]>)[customerInfo.wilaya]?.length>0&&(
-                <div style={{marginBottom:12}}>
-                  <label style={LB}>{T.chatCustCommune}</label>
-                  <select value={customerInfo.commune} onChange={e=>setCustomerInfo(c=>({...c,commune:e.target.value}))} style={I(false)}>
-                    <option value="">{T.chatCustCommune}</option>
-                    {((DZ_COMMUNES as Record<string,string[]>)[customerInfo.wilaya]||[]).map((c:string)=><option key={c}>{c}</option>)}
-                  </select>
-                </div>
-              )}
-              {customerErr&&<div style={{background:`${th.err}15`,border:`1px solid ${th.err}33`,borderRadius:9,padding:'9px 12px',color:th.err,fontSize:13,marginBottom:12}}>⚠ {customerErr}</div>}
-              <button onClick={startChat} style={{...BTN('primary'),width:'100%',padding:13,fontSize:15}}>{T.chatCustStart}</button>
+              <div style={{marginBottom:12}}>
+                <label style={LB}>{T.chatDemoPrice}</label>
+                <input type="number" placeholder={T.chatDemoPricePh} value={demoProduct.price} onChange={e=>{setDemoProduct(p=>({...p,price:e.target.value}));setDemoErr('');}} style={I(!!demoErr&&(!demoProduct.price.trim()||isNaN(Number(demoProduct.price))))} onKeyDown={e=>e.key==='Enter'&&startChat()}/>
+              </div>
+              <div style={{marginBottom:14}}>
+                <label style={LB}>{T.chatDemoSpecs}</label>
+                <input placeholder="مثال: 660 UC، يصلح لكل الأجهزة" value={demoProduct.specs} onChange={e=>setDemoProduct(p=>({...p,specs:e.target.value}))} style={I(false)} onKeyDown={e=>e.key==='Enter'&&startChat()}/>
+              </div>
+              {demoErr&&<div style={{background:`${th.err}15`,border:`1px solid ${th.err}33`,borderRadius:9,padding:'9px 12px',color:th.err,fontSize:13,marginBottom:12}}>⚠ {demoErr}</div>}
+              <button onClick={startChat} style={{...BTN('primary'),width:'100%',padding:13,fontSize:15}}>{T.chatDemoStart}</button>
             </div>
           </div>:<div style={{display:'flex',flexDirection:'column',height:'calc(100vh - 165px)'}}>
             <div style={{...CARD,display:'flex',alignItems:'center',gap:10,marginBottom:10,padding:'10px 12px'}}>
-              <div style={{width:34,height:34,background:avatarColor(customerInfo.name||'?'),borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:16,fontWeight:800,color:'#fff'}}>{(customerInfo.name[0]||'?').toUpperCase()}</div>
+              <div style={{width:34,height:34,background:`linear-gradient(135deg,${th.acc},${th.acc2})`,borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:18}}>📦</div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{color:th.text,fontWeight:700,fontSize:13}}>{customerInfo.name}</div>
-                <div style={{color:th.muted,fontSize:11}}>{customerInfo.phone} • {customerInfo.wilaya}{customerInfo.commune?' / '+customerInfo.commune:''}</div>
+                <div style={{color:th.text,fontWeight:700,fontSize:13}}>{demoProduct.name}</div>
+                <div style={{color:th.acc,fontSize:12,fontWeight:800}}>{Number(demoProduct.price).toLocaleString()} DZD{demoProduct.specs?' · '+demoProduct.specs:''}</div>
               </div>
-              <button onClick={()=>{setChatStep('customer');setMsgs([]);}} style={{...BTN('muted'),padding:'5px 10px',fontSize:11}}>{T.chatCustReset}</button>
+              <button onClick={()=>{setChatStep('product');setMsgs([]);}} style={{...BTN('muted'),padding:'5px 10px',fontSize:11}}>{T.chatDemoReset}</button>
             </div>
             <div style={{flex:1,overflowY:'auto',display:'flex',flexDirection:'column',gap:10,paddingBottom:8}}>
               {msgs.map((m,i)=>(
