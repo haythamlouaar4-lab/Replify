@@ -3,7 +3,7 @@ import { DZ_COMMUNES } from "./communes";
 import { sanitizeEmail, isBlockedDomain, isValidAlgerianPhone, getOrCreateUID, getTierForCount, getNextTier, tierProgressPct, TIERS } from "./utils/email";
 
 const WILAYAS = Object.keys(DZ_COMMUNES);
-const DEFAULT_ACCOUNTS = ["contact@vipgopay.com"];
+const DEFAULT_ACCOUNTS: string[] = [];
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const LANGS = {
@@ -38,7 +38,7 @@ const LANGS = {
     product:"المنتج:", pending:"معلّق", confirmed:"مؤكد", cancelled:"ملغي",
     confirm:"✅ تأكيد", cancelOrder:"✕ إلغاء",
     exportCSV:"📥 CSV", copied:"✅ تم النسخ!", shareLabel:"تواصل:",
-    waMsg:"مرحبا {name}،\nطلبيتك {id} مسجّلة ✅\nالمنتج: {product}\nالسعر: {price} DZD\nالولاية: {wilaya}\nشكراً!",
+    waMsg:"مرحبا {name}،\nطلبيتك {id} مسجّلة ✅\nالمنتج: {product}\nالسعر: {price} DZD\nشكراً!",
     filterAll:"الكل", filterPending:"معلّق", filterConfirmed:"مؤكد", filterCancelled:"ملغي",
     settingsTitle:"الإعدادات", shopName:"🏪 اسم المتجر",
     emailL:"📧 البريد الإلكتروني", shopType:"🗂️ نوع البضاعة",
@@ -56,9 +56,9 @@ const LANGS = {
     model:"🤖 الموديل", theme:"🎨 المظهر", dark:"🌙 داكن", light:"☀️ فاتح",
     lang:"🌐 اللغة", saved:"✅ محفوظ تلقائياً",
     clearAll:"🗑️ مسح بيانات هذا الحساب", clearQ:"هل أنت متأكد؟",
-    privacyBtn:"🔒 سياسة الخصوصية", privacyTitle:"سياسة الخصوصية",
-    privacyText:"نجمع الاسم والهاتف والولاية فقط لمعالجة طلبك. لا نشارك بياناتك مع أطراف ثالثة.",
-    acceptPrivacy:"أوافق", orderBanner:"طلبية جديدة مسجّلة!",
+    privacyBtn:"🔒 سياسة الخصوصية", privacyTitle:"سياسة الخصوصية — VipGoPay",
+    privacyText:"📋 البيانات التي نجمعها\nنجمع البريد الإلكتروني لإدارة الحساب وتسجيل الدخول. نجمع بيانات المنتجات والطلبيات التي تُدخلها بنفسك. لا نجمع أي بيانات شخصية دون علمك أو موافقتك الصريحة.\n\n🔧 كيف نستخدم البيانات\nتُستخدم بيانات المتجر حصراً لتشغيل ميزات التطبيق: إدارة المخزون، معالجة الطلبيات، وإرسال الإشعارات. لا نستخدم بياناتك لأغراض إعلانية أو تجارية خارجية.\n\n🤖 الذكاء الاصطناعي (Gemini)\nمحادثات الشات تُرسل إلى Google Gemini API لتوليد الردود الآنية فقط. تخضع هذه البيانات لسياسة خصوصية Google المتاحة على policies.google.com. لا تُحفظ المحادثات دائمياً على خوادمنا.\n\n🔗 التكاملات (WhatsApp · Telegram · Instagram · Email)\nمفاتيح API الخاصة بمنصات التواصل تُخزَّن محلياً في متصفحك (localStorage) فقط ولا تُرفع إلى خوادمنا بشكل دائم. تُرسَل إلى الخادم الخلفي فقط لحظة إرسال الإشعارات.\n\n🛡️ الأمان\nجميع الاتصالات مشفّرة بـ HTTPS. لا نستطيع الوصول إلى البيانات المخزّنة محلياً في متصفحك. لا تُشارك مفاتيح API مع أي شخص.\n\n⚖️ حقوقك\nيمكنك حذف جميع بيانات حسابك في أي وقت عبر الإعدادات ← مسح البيانات. لا نبيع بياناتك لأي طرف ثالث ولا نشاركها لأغراض تجارية تحت أي ظرف.\n\n📅 تحديثات السياسة\nقد نُحدّث هذه السياسة دورياً. سيُعلَم المستخدمون بأي تغييرات جوهرية عبر التطبيق.\n\n📧 للتواصل: contact@vipgopay.dz",
+    acceptPrivacy:"فهمت ✓", orderBanner:"طلبية جديدة مسجّلة!",
     apiNote:"⚙️ مفاتيح API محمية — تعمل عبر السيرفر الخلفي فقط.",
     integSection:"🔗 ربط المنصات الحقيقي",
     integNote:"أدخل بيانات الربط الحقيقية. تُحفظ بأمان وتُستخدم لإرسال إشعارات فعلية عند تأكيد كل طلبية.",
@@ -155,7 +155,7 @@ const LANGS = {
     product:"Produit:", pending:"En attente", confirmed:"Confirmé", cancelled:"Annulé",
     confirm:"✅ Confirmer", cancelOrder:"✕ Annuler",
     exportCSV:"📥 CSV", copied:"✅ Copié!", shareLabel:"Contact:",
-    waMsg:"Bonjour {name},\nCommande {id} ✅\nProduit: {product}\nPrix: {price} DZD\nWilaya: {wilaya}\nMerci!",
+    waMsg:"Bonjour {name},\nCommande {id} ✅\nProduit: {product}\nPrix: {price} DZD\nMerci!",
     filterAll:"Tout", filterPending:"En attente", filterConfirmed:"Confirmé", filterCancelled:"Annulé",
     settingsTitle:"Paramètres", shopName:"🏪 Nom boutique",
     emailL:"📧 Email", shopType:"🗂️ Type produits",
@@ -173,9 +173,9 @@ const LANGS = {
     model:"🤖 Modèle", theme:"🎨 Thème", dark:"🌙 Sombre", light:"☀️ Clair",
     lang:"🌐 Langue", saved:"✅ Sauvegardé",
     clearAll:"🗑️ Effacer données", clearQ:"Êtes-vous sûr?",
-    privacyBtn:"🔒 Confidentialité", privacyTitle:"Politique de confidentialité",
-    privacyText:"Nous collectons nom, téléphone et wilaya uniquement pour traiter votre commande.",
-    acceptPrivacy:"J'accepte", orderBanner:"Nouvelle commande!",
+    privacyBtn:"🔒 Confidentialité", privacyTitle:"Politique de confidentialité — VipGoPay",
+    privacyText:"📋 Données collectées\nNous collectons votre email pour la gestion de compte. Nous collectons les données produits et commandes que vous saisissez. Aucune donnée personnelle n'est collectée sans votre consentement.\n\n🔧 Utilisation des données\nVos données sont utilisées exclusivement pour faire fonctionner l'application : gestion des stocks, commandes, notifications. Aucune utilisation publicitaire ou commerciale externe.\n\n🤖 Intelligence artificielle (Gemini)\nLes conversations sont envoyées à Google Gemini API pour générer des réponses en temps réel. Ces données sont soumises à la politique de confidentialité de Google sur policies.google.com.\n\n🔗 Intégrations (WhatsApp · Telegram · Instagram · Email)\nVos clés API sont stockées localement dans votre navigateur (localStorage) uniquement. Elles sont transmises au serveur uniquement lors de l'envoi de notifications.\n\n🛡️ Sécurité\nToutes les communications sont chiffrées en HTTPS. Nous ne pouvons pas accéder aux données stockées localement. Ne partagez jamais vos clés API.\n\n⚖️ Vos droits\nVous pouvez supprimer toutes vos données à tout moment via Paramètres → Effacer les données. Nous ne vendons ni ne partageons vos données à des tiers.\n\n📧 Contact : contact@vipgopay.dz",
+    acceptPrivacy:"Compris ✓", orderBanner:"Nouvelle commande!",
     apiNote:"⚙️ Clés sécurisées côté serveur.",
     integSection:"🔗 Intégrations", integNote:"Credentials réels pour les vraies notifications.",
     waTitle:"💬 WhatsApp Business API", tgTitle:"✈️ Telegram Bot",
@@ -271,7 +271,7 @@ const LANGS = {
     product:"Product:", pending:"Pending", confirmed:"Confirmed", cancelled:"Cancelled",
     confirm:"✅ Confirm", cancelOrder:"✕ Cancel",
     exportCSV:"📥 CSV", copied:"✅ Copied!", shareLabel:"Contact:",
-    waMsg:"Hello {name},\nOrder {id} confirmed ✅\nProduct: {product}\nPrice: {price} DZD\nWilaya: {wilaya}\nThank you!",
+    waMsg:"Hello {name},\nOrder {id} confirmed ✅\nProduct: {product}\nPrice: {price} DZD\nThank you!",
     filterAll:"All", filterPending:"Pending", filterConfirmed:"Confirmed", filterCancelled:"Cancelled",
     settingsTitle:"Settings", shopName:"🏪 Store Name",
     emailL:"📧 Email", shopType:"🗂️ Product Type",
@@ -289,9 +289,9 @@ const LANGS = {
     model:"🤖 Model", theme:"🎨 Theme", dark:"🌙 Dark", light:"☀️ Light",
     lang:"🌐 Language", saved:"✅ Auto-saved",
     clearAll:"🗑️ Clear account data", clearQ:"Are you sure?",
-    privacyBtn:"🔒 Privacy Policy", privacyTitle:"Privacy Policy",
-    privacyText:"We collect name, phone and wilaya only to process your order.",
-    acceptPrivacy:"Accept", orderBanner:"New order recorded!",
+    privacyBtn:"🔒 Privacy Policy", privacyTitle:"Privacy Policy — VipGoPay",
+    privacyText:"📋 Data We Collect\nWe collect your email for account management. We collect product and order data that you enter in the app. No personal data is collected without your knowledge or consent.\n\n🔧 How We Use Your Data\nYour data is used exclusively to run app features: inventory management, orders, and notifications. No advertising or external commercial use.\n\n🤖 Artificial Intelligence (Gemini)\nConversations are sent to Google Gemini API to generate real-time responses. This data is subject to Google's privacy policy at policies.google.com.\n\n🔗 Integrations (WhatsApp · Telegram · Instagram · Email)\nYour API keys are stored locally in your browser (localStorage) only. They are transmitted to the server only when sending notifications.\n\n🛡️ Security\nAll communications are HTTPS encrypted. We cannot access your locally stored data. Never share your API keys with anyone.\n\n⚖️ Your Rights\nYou can delete all your data at any time via Settings → Clear Data. We do not sell or share your data with any third party.\n\n📧 Contact: contact@vipgopay.dz",
+    acceptPrivacy:"Got it ✓", orderBanner:"New order recorded!",
     apiNote:"⚙️ API keys secured server-side only.",
     integSection:"🔗 Real Integrations", integNote:"Real credentials for live notifications.",
     waTitle:"💬 WhatsApp Business API", tgTitle:"✈️ Telegram Bot",
@@ -492,6 +492,30 @@ export default function App(){
   return<AppContent key={activeEmail} email={activeEmail} onLogout={handleLogout} lang={lang} setLang={l=>{setLang(l);lss('sr_lang',l)}} tn={tn} setTn={t=>{setTn(t);lss('sr_theme',t)}}/>;
 }
 
+const TIPS: Record<string,string> = {
+  shopName:"اسم متجرك الرسمي. سيظهر في رسائل WhatsApp وفي محادثات الذكاء الاصطناعي مع الزبائن.",
+  email:"بريدك الإلكتروني لاستقبال إشعارات OTP وتفعيل التحقق الثنائي (2FA) عند تأكيد الطلبيات.",
+  shopType:"نوع المنتجات التي تبيعها (مثال: إلكترونيات، ملابس، إكسسوارات...). يُساعد الذكاء الاصطناعي على تكييف ردوده.",
+  location:"عنوان متجرك أو مدينتك. يُستخدم في الردود التلقائية عند سؤال الزبائن عن الموقع.",
+  hours:"أوقات عمل متجرك. مثال: 9:00-22:00. يُخبر الذكاء الاصطناعي الزبائن بها تلقائياً.",
+  officeDesk:"سعر التوصيل لمكاتب البريد السريع (يالدس، زيدوم...) بالدينار الجزائري.",
+  officeHome:"سعر التوصيل للمنزل مباشرة بالدينار الجزائري.",
+  extra:"تعليمات خاصة للذكاء الاصطناعي. مثال:\n• لا تعطِ أسعاراً قبل التحقق من المخزون\n• أخبر الزبائن بعروض الجمعة\n• ردّ فقط باللغة العربية",
+  model:"نموذج الذكاء الاصطناعي:\n• Gemini 2.5 Flash ⚡ — سريع وفعّال للاستخدام اليومي المكثف\n• Gemini 2.5 Pro 🏆 — أدق وأقوى للمحادثات المعقدة",
+  waPhoneId:"Phone Number ID الخاص برقم WhatsApp Business.\n📍 للحصول عليه:\n1. اذهب إلى Meta for Developers\n2. WhatsApp → API Setup\n3. انسخ رقم الـ Phone Number ID\nمثال: 123456789012345",
+  waToken:"Access Token الدائم لحساب WhatsApp Business API.\n📍 للحصول عليه:\n1. Meta for Developers → WhatsApp → API Setup\n2. انقر على Generate token → اختر Never Expire\n⚠️ احفظه بأمان ولا تُشاركه مع أحد",
+  waPhoneNum:"رقم هاتف WhatsApp Business بالصيغة الدولية.\nمثال: +213550000000\n(يبدأ بـ + ثم كود البلد 213)",
+  tgToken:"Bot Token الخاص ببوت Telegram.\n📍 لإنشاء بوت جديد:\n1. افتح @BotFather في تيليغرام\n2. أرسل /newbot واتبع التعليمات\n3. انسخ الـ Token\nمثال: 123456789:ABCdefGHIjkl",
+  tgChatId:"معرّف القناة أو المجموعة لاستقبال الإشعارات.\n📍 للحصول عليه:\n• أضف @userinfobot للمجموعة ثم أرسل أي رسالة\n• أو افتح: api.telegram.org/bot{TOKEN}/getUpdates\nمثال: -1001234567890",
+  igAccountId:"معرّف حساب Instagram Business.\n📍 تجده في:\nMeta Business Manager → Instagram Accounts → Account ID\nمثال: 17841000000000",
+  igToken:"Access Token لحساب Instagram Business.\n📍 احصل عليه من:\nMeta for Developers → Instagram → API with Instagram Login\n⚠️ يجب أن يكون الحساب من نوع Business أو Creator",
+  igEmail:"البريد الإلكتروني المرتبط بصفحة Instagram Business الخاصة بك.",
+  igRecipientId:"IGSID للاختبار — معرّف المستخدم الذي ستُرسل له رسائل الاختبار.\n📍 احصل عليه من:\nMeta Graph API Explorer",
+  emailApiKey:"مفتاح API لخدمة الإيميل المختارة:\n• Resend: resend.com/api-keys (re_XXXXXX)\n• Mailjet: app.mailjet.com/account/apikeys\n• SendGrid: app.sendgrid.com/settings/api_keys\n• SMTP: أدخل بالصيغة: host:port:email:password",
+  emailSender:"بريد المرسل — من أين ستُرسل رسائلك للزبائن.\nيجب أن يكون مُفعّلاً في خدمة الإيميل.\nمثال: no-reply@متجرك.dz",
+  emailSenderName:"الاسم الذي يظهر للزبون في صندوق الوارد.\nمثال: متجر الإلكترونيات أو VipGoPay",
+};
+
 function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogout:()=>void;lang:Lang;setLang:(l:Lang)=>void;tn:'dark'|'light';setTn:(t:'dark'|'light')=>void}){
   const K=(key:string)=>`sr_${emailKey(email)}_${key}`;
   const T=LANGS[lang];const th={...THEMES.dark,...THEMES[tn]};
@@ -548,6 +572,8 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
   const [quickSuccess,setQuickSuccess]=useState(false);
   const [newQuick,setNewQuick]=useState({gameName:'',gameId:'',productId:''});
   const [showQuickForm,setShowQuickForm]=useState(false);
+  const [activeTip,setActiveTip]=useState<string|null>(null);
+  const InfoTip=({k}:{k:string})=>TIPS[k]?<button type="button" onClick={()=>setActiveTip(k)} style={{background:'none',border:`1px solid ${th.acc}55`,color:th.acc,borderRadius:'50%',width:17,height:17,fontSize:10,cursor:'pointer',padding:0,marginInlineStart:6,display:'inline-flex',alignItems:'center',justifyContent:'center',fontWeight:900,flexShrink:0,lineHeight:1,verticalAlign:'middle'}}>i</button>:null;
 
   const [shopId]=useState<string>(()=>{const ex=localStorage.getItem(K('shopid'));if(ex)return ex;const id=Math.random().toString(36).slice(2,10).toUpperCase();localStorage.setItem(K('shopid'),id);return id;});
   const [webhookSecret]=useState<string>(()=>{const ex=localStorage.getItem(K('whsec'));if(ex)return ex;const b=new Uint8Array(16);crypto.getRandomValues(b);const s=Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');localStorage.setItem(K('whsec'),s);return s;});
@@ -669,8 +695,8 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
   const filteredOrders=orderFilter==='all'?orders:orders.filter(o=>o.status===orderFilter);
 
   const createQuickOrder=()=>{
-    if(!quickCust.name.trim()){setQuickCustErr(T.chatCustRequired);return;}
-    if(!isValidAlgerianPhone(quickCust.phone)){setQuickCustErr(T.chatCustPhoneErr);return;}
+    if(!quickCust.name.trim()){setQuickCustErr(lang==='fr'?'Champ obligatoire':lang==='en'?'Required field':'الحقل مطلوب');return;}
+    if(!isValidAlgerianPhone(quickCust.phone)){setQuickCustErr(lang==='fr'?'Numéro invalide (0XXXXXXXXX)':lang==='en'?'Invalid phone (0XXXXXXXXX)':'رقم غير صحيح (0XXXXXXXXX)');return;}
     if(!quickModal)return;
     const linkedProd=prods.find(p=>p.id===quickModal.productId);
     const o:Order={id:`ORD-${Date.now()}`,cust:{name:quickCust.name.trim(),phone:quickCust.phone.trim(),wilaya:'',commune:''},product:linkedProd?.name??quickModal.productName,productId:quickModal.productId??0,price:linkedProd?.price??0,status:'pending',time:new Date().toLocaleString()};
@@ -721,7 +747,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
       {showPrivacy&&<div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(4px)',zIndex:1000,display:'flex',alignItems:'flex-end'}}>
         <div style={{background:th.surf,width:'100%',borderRadius:'20px 20px 0 0',padding:20,maxHeight:'80vh',overflowY:'auto'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}><h3 style={{margin:0,color:th.text}}>{T.privacyTitle}</h3><button onClick={()=>setShowPrivacy(false)} style={{background:th.surf2,border:'none',color:th.muted,width:30,height:30,borderRadius:8,cursor:'pointer'}}>✕</button></div>
-          <p style={{color:th.sub,fontSize:13,lineHeight:1.8,marginBottom:20}}>{T.privacyText}</p>
+          <p style={{color:th.sub,fontSize:13,lineHeight:1.9,marginBottom:20,whiteSpace:'pre-line'}}>{T.privacyText}</p>
           <button onClick={()=>setShowPrivacy(false)} style={{...BTN('primary'),width:'100%',padding:13}}>{T.acceptPrivacy}</button>
         </div>
       </div>}
@@ -763,11 +789,21 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
                 {quickModal.productName&&<div style={{color:th.muted,fontSize:12}}>{quickModal.productName}</div>}
               </div>
               <div style={{marginBottom:10}}><label style={LB}>{T.gamingQuickCustName}</label><input value={quickCust.name} onChange={e=>{setQuickCust(c=>({...c,name:e.target.value}));setQuickCustErr('');}} style={I(!!quickCustErr&&!quickCust.name.trim())}/></div>
-              <div style={{marginBottom:12}}><label style={LB}>{T.gamingQuickCustPhone}</label><input value={quickCust.phone} placeholder={T.chatCustPhonePh} onChange={e=>{setQuickCust(c=>({...c,phone:e.target.value}));setQuickCustErr('');}} style={I(!!quickCustErr&&!isValidAlgerianPhone(quickCust.phone))}/></div>
+              <div style={{marginBottom:12}}><label style={LB}>{T.gamingQuickCustPhone}</label><input value={quickCust.phone} placeholder="0XXXXXXXXX" onChange={e=>{setQuickCust(c=>({...c,phone:e.target.value}));setQuickCustErr('');}} style={I(!!quickCustErr&&!isValidAlgerianPhone(quickCust.phone))}/></div>
               {quickCustErr&&<div style={{color:th.err,fontSize:12,marginBottom:12}}>⚠ {quickCustErr}</div>}
               <button onClick={createQuickOrder} style={{...BTN('primary'),width:'100%',padding:12,marginBottom:8}}>{T.gamingQuickConfirm}</button>
               <button onClick={()=>{setQuickModal(null);setQuickCust({name:'',phone:''});setQuickCustErr('');}} style={{...BTN('muted'),width:'100%',padding:9,fontSize:12}}>{T.cancel}</button>
             </>}
+          </div>
+        </div>
+      )}
+
+      {activeTip&&TIPS[activeTip]&&(
+        <div onClick={()=>setActiveTip(null)} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.82)',backdropFilter:'blur(5px)',zIndex:400,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+          <div onClick={e=>e.stopPropagation()} style={{background:th.surf,border:`1px solid ${th.acc}55`,borderRadius:18,padding:'22px 20px',width:'100%',maxWidth:370,boxShadow:`0 0 40px ${th.acc}22`,maxHeight:'80vh',overflowY:'auto'}}>
+            <div style={{color:th.acc,fontWeight:800,fontSize:14,marginBottom:12}}>ℹ️ معلومات</div>
+            <div style={{color:th.text,fontSize:13,lineHeight:2,whiteSpace:'pre-line'}}>{TIPS[activeTip]}</div>
+            <button onClick={()=>setActiveTip(null)} style={{...BTN('primary'),marginTop:18,width:'100%',padding:11,fontWeight:700}}>فهمت ✓</button>
           </div>
         </div>
       )}
@@ -1122,7 +1158,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
           <div style={CARD}>
             {([[T.shopName,'shopName'],[T.emailL,'email'],[T.shopType,'shopType'],[T.location,'location'],[T.hours,'hours'],[T.officeD,'officeDesk','number'],[T.homeD,'officeHome','number'],[T.extra,'extra']] as [string,keyof Config,string?][]).map(([label,key,type])=>(
               <div key={key} style={{marginBottom:12}}>
-                <label style={LB}>{label}</label>
+                <label style={{...LB,display:'flex',alignItems:'center',gap:0}}><span>{label}</span><InfoTip k={key}/></label>
                 <input type={type||'text'} value={String(cfg[key])||''} onChange={e=>setCfg({...cfg,[key]:e.target.value})} style={I(false)}/>
               </div>
             ))}
@@ -1145,26 +1181,26 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
                   </button>
                   {expandInteg===key&&<div style={{padding:'0 14px 14px',borderTop:`1px solid ${th.border}`}}>
                     {key==='wa'&&<>
-                      <div style={{marginTop:12,marginBottom:10}}><label style={LB}>{T.waPhoneId}</label><input placeholder={T.waPhoneIdPh} value={integCfg.wa.phoneNumberId} onChange={e=>setIntegCfg(c=>({...c,wa:{...c.wa,phoneNumberId:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:10}}><label style={LB}>{T.waToken}</label><input type="password" placeholder={T.waTokenPh} value={integCfg.wa.accessToken} onChange={e=>setIntegCfg(c=>({...c,wa:{...c.wa,accessToken:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:12}}><label style={LB}>{T.waPhoneNum}</label><input placeholder={T.waPhoneNumPh} value={integCfg.wa.phoneNumber} onChange={e=>setIntegCfg(c=>({...c,wa:{...c.wa,phoneNumber:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginTop:12,marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.waPhoneId}</span><InfoTip k="waPhoneId"/></label><input placeholder={T.waPhoneIdPh} value={integCfg.wa.phoneNumberId} onChange={e=>setIntegCfg(c=>({...c,wa:{...c.wa,phoneNumberId:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.waToken}</span><InfoTip k="waToken"/></label><input type="password" placeholder={T.waTokenPh} value={integCfg.wa.accessToken} onChange={e=>setIntegCfg(c=>({...c,wa:{...c.wa,accessToken:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:12}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.waPhoneNum}</span><InfoTip k="waPhoneNum"/></label><input placeholder={T.waPhoneNumPh} value={integCfg.wa.phoneNumber} onChange={e=>setIntegCfg(c=>({...c,wa:{...c.wa,phoneNumber:e.target.value}}))} style={I(false)}/></div>
                     </>}
                     {key==='tg'&&<>
-                      <div style={{marginTop:12,marginBottom:10}}><label style={LB}>{T.tgToken}</label><input type="password" placeholder={T.tgTokenPh} value={integCfg.tg.botToken} onChange={e=>setIntegCfg(c=>({...c,tg:{...c.tg,botToken:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:12}}><label style={LB}>{T.tgChatId}</label><input placeholder={T.tgChatIdPh} value={integCfg.tg.chatId} onChange={e=>setIntegCfg(c=>({...c,tg:{...c.tg,chatId:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginTop:12,marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.tgToken}</span><InfoTip k="tgToken"/></label><input type="password" placeholder={T.tgTokenPh} value={integCfg.tg.botToken} onChange={e=>setIntegCfg(c=>({...c,tg:{...c.tg,botToken:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:12}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.tgChatId}</span><InfoTip k="tgChatId"/></label><input placeholder={T.tgChatIdPh} value={integCfg.tg.chatId} onChange={e=>setIntegCfg(c=>({...c,tg:{...c.tg,chatId:e.target.value}}))} style={I(false)}/></div>
                     </>}
                     {key==='ig'&&<>
                       <div style={{marginTop:12,marginBottom:10}}><label style={LB}>{T.igPageType}</label><select value={integCfg.ig.pageType} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,pageType:e.target.value}}))} style={I(false)}>{T.igPageTypes.map(pt=><option key={pt}>{pt}</option>)}</select></div>
-                      <div style={{marginBottom:10}}><label style={LB}>{T.igEmail}</label><input type="email" placeholder={T.igEmailPh} value={integCfg.ig.email} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,email:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:10}}><label style={LB}>{T.igAccountId}</label><input placeholder={T.igAccountIdPh} value={integCfg.ig.accountId} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,accountId:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:10}}><label style={LB}>{T.igToken}</label><input type="password" placeholder={T.igTokenPh} value={integCfg.ig.accessToken} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,accessToken:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:12}}><label style={LB}>{T.igRecipientId}</label><input placeholder={T.igRecipientIdPh} value={integCfg.ig.recipientId} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,recipientId:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.igEmail}</span><InfoTip k="igEmail"/></label><input type="email" placeholder={T.igEmailPh} value={integCfg.ig.email} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,email:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.igAccountId}</span><InfoTip k="igAccountId"/></label><input placeholder={T.igAccountIdPh} value={integCfg.ig.accountId} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,accountId:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.igToken}</span><InfoTip k="igToken"/></label><input type="password" placeholder={T.igTokenPh} value={integCfg.ig.accessToken} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,accessToken:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:12}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.igRecipientId}</span><InfoTip k="igRecipientId"/></label><input placeholder={T.igRecipientIdPh} value={integCfg.ig.recipientId} onChange={e=>setIntegCfg(c=>({...c,ig:{...c.ig,recipientId:e.target.value}}))} style={I(false)}/></div>
                     </>}
                     {key==='emailSvc'&&<>
                       <div style={{marginTop:12,marginBottom:10}}><label style={LB}>{T.emailService}</label><select value={integCfg.emailSvc.service} onChange={e=>setIntegCfg(c=>({...c,emailSvc:{...c.emailSvc,service:e.target.value}}))} style={I(false)}><option value="resend">Resend</option><option value="mailjet">Mailjet</option><option value="sendgrid">SendGrid</option><option value="smtp">SMTP Custom</option></select></div>
-                      <div style={{marginBottom:10}}><label style={LB}>{T.emailApiKey}</label><input type="password" placeholder={T.emailApiKeyPh} value={integCfg.emailSvc.apiKey} onChange={e=>setIntegCfg(c=>({...c,emailSvc:{...c.emailSvc,apiKey:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:10}}><label style={LB}>{T.emailSender}</label><input type="email" placeholder={T.emailSenderPh} value={integCfg.emailSvc.senderEmail} onChange={e=>setIntegCfg(c=>({...c,emailSvc:{...c.emailSvc,senderEmail:e.target.value}}))} style={I(false)}/></div>
-                      <div style={{marginBottom:12}}><label style={LB}>{T.emailSenderName}</label><input placeholder={T.emailSenderNamePh} value={integCfg.emailSvc.senderName} onChange={e=>setIntegCfg(c=>({...c,emailSvc:{...c.emailSvc,senderName:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.emailApiKey}</span><InfoTip k="emailApiKey"/></label><input type="password" placeholder={T.emailApiKeyPh} value={integCfg.emailSvc.apiKey} onChange={e=>setIntegCfg(c=>({...c,emailSvc:{...c.emailSvc,apiKey:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:10}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.emailSender}</span><InfoTip k="emailSender"/></label><input type="email" placeholder={T.emailSenderPh} value={integCfg.emailSvc.senderEmail} onChange={e=>setIntegCfg(c=>({...c,emailSvc:{...c.emailSvc,senderEmail:e.target.value}}))} style={I(false)}/></div>
+                      <div style={{marginBottom:12}}><label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.emailSenderName}</span><InfoTip k="emailSenderName"/></label><input placeholder={T.emailSenderNamePh} value={integCfg.emailSvc.senderName} onChange={e=>setIntegCfg(c=>({...c,emailSvc:{...c.emailSvc,senderName:e.target.value}}))} style={I(false)}/></div>
                     </>}
                     <button onClick={()=>saveInteg(key)} style={{...BTN('primary'),width:'100%',padding:10,fontSize:13}}>{integSaved[key]?T.integSaved:T.saveInteg}</button>
                   </div>}
@@ -1187,40 +1223,6 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
             </div>
           </div>
           <div style={CARD}>
-            <div style={{color:th.text,fontWeight:700,marginBottom:10,fontSize:14}}>{T.shippingSection}</div>
-            <div style={{display:'flex',gap:8,marginBottom:12}}>
-              <button onClick={()=>setShippingView('custom')} style={PILL(shippingView==='custom')}>{T.shippingCustom} ({(cfg.wilayaRates||[]).length})</button>
-              <button onClick={()=>setShippingView('all')} style={PILL(shippingView==='all')}>{T.shippingAll} (58)</button>
-            </div>
-            {shippingView==='all'&&<>
-              <input placeholder={T.shippingSearch} value={shippingSearch} onChange={e=>setShippingSearch(e.target.value)} style={{...I(false),marginBottom:10,fontSize:13}}/>
-              <div style={{maxHeight:280,overflowY:'auto',background:th.surf2,borderRadius:10,border:`1px solid ${th.border}`}}>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 60px 60px',gap:0}}>
-                  <div style={{padding:'6px 10px',color:th.muted,fontSize:10,fontWeight:700,borderBottom:`1px solid ${th.border}`}}>{T.rateWilaya}</div>
-                  <div style={{padding:'6px 4px',color:th.muted,fontSize:10,fontWeight:700,textAlign:'center',borderBottom:`1px solid ${th.border}`}}>📦</div>
-                  <div style={{padding:'6px 4px',color:th.muted,fontSize:10,fontWeight:700,textAlign:'center',borderBottom:`1px solid ${th.border}`}}>🏠</div>
-                  {shippingWilayas.map(w=>{const r=getRate(w);return(<React.Fragment key={w}><div style={{padding:'7px 10px',color:r?th.text:th.muted,fontSize:12,borderBottom:`1px solid ${th.border}22`,fontWeight:r?700:400}}>{w}</div><div style={{padding:'7px 4px',textAlign:'center',fontSize:12,color:r?th.ok:th.muted,borderBottom:`1px solid ${th.border}22`}}>{r?r.office:cfg.officeDesk}</div><div style={{padding:'7px 4px',textAlign:'center',fontSize:12,color:r?th.ok:th.muted,borderBottom:`1px solid ${th.border}22`}}>{r?r.home:cfg.officeHome}</div></React.Fragment>);})}
-                </div>
-              </div>
-            </>}
-            {shippingView==='custom'&&<>
-              {(cfg.wilayaRates||[]).map(r=>(
-                <div key={r.wilaya} style={{display:'grid',gridTemplateColumns:'1fr 60px 60px 30px',gap:6,marginBottom:6,alignItems:'center',background:th.surf2,borderRadius:8,padding:'6px 8px'}}>
-                  <span style={{color:th.text,fontSize:13,fontWeight:700}}>{r.wilaya}</span>
-                  <span style={{color:th.ok,fontSize:13,textAlign:'center',fontWeight:700}}>{r.office}</span>
-                  <span style={{color:th.ok,fontSize:13,textAlign:'center',fontWeight:700}}>{r.home}</span>
-                  <button onClick={()=>delRate(r.wilaya)} style={{background:`${th.err}22`,border:'none',color:th.err,width:26,height:26,borderRadius:6,cursor:'pointer',fontSize:11}}>✕</button>
-                </div>
-              ))}
-              <div style={{display:'grid',gridTemplateColumns:'1fr 60px 60px',gap:6,marginBottom:8}}>
-                <select value={newRate.wilaya} onChange={e=>setNewRate({...newRate,wilaya:e.target.value})} style={{...I(false),padding:'8px 10px',fontSize:12}}><option value="">{T.rateWilaya}</option>{WILAYAS.filter(w=>(cfg.wilayaRates||[]).every(r=>r.wilaya!==w)).map(w=><option key={w}>{w}</option>)}</select>
-                <input type="number" placeholder="📦" value={newRate.office} onChange={e=>setNewRate({...newRate,office:e.target.value})} style={{...I(false),padding:'8px 6px',fontSize:12}}/>
-                <input type="number" placeholder="🏠" value={newRate.home} onChange={e=>setNewRate({...newRate,home:e.target.value})} style={{...I(false),padding:'8px 6px',fontSize:12}}/>
-              </div>
-              <button onClick={addRate} style={{...BTN('primary'),width:'100%',padding:9,fontSize:13}}>{T.addRate}</button>
-            </>}
-          </div>
-          <div style={CARD}>
             <div style={{color:th.text,fontWeight:700,marginBottom:12}}>{T.notifSection}</div>
             {notifPerm==='granted'?<div style={{background:`${th.ok}15`,border:`1px solid ${th.ok}33`,borderRadius:9,padding:'9px 12px',fontSize:12,color:th.ok,marginBottom:12}}>{T.notifEnabled}</div>
             :notifPerm==='denied'?<div style={{background:`${th.err}15`,border:`1px solid ${th.err}33`,borderRadius:9,padding:'9px 12px',fontSize:12,color:th.err,marginBottom:12}}>{T.notifDenied}</div>
@@ -1233,7 +1235,7 @@ function AppContent({email,onLogout,lang,setLang,tn,setTn}:{email:string;onLogou
             </div>
           </div>
           <div style={CARD}>
-            <label style={LB}>{T.model}</label>
+            <label style={{...LB,display:'flex',alignItems:'center'}}><span>{T.model}</span><InfoTip k="model"/></label>
             <select value={cfg.model} onChange={e=>setCfg({...cfg,model:e.target.value})} style={{...I(false),marginBottom:10}}>
               <option value="gemini-2.5-flash">Gemini 2.5 Flash ⚡</option>
               <option value="gemini-2.5-pro">Gemini 2.5 Pro 🏆</option>
