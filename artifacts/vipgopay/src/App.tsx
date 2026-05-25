@@ -4,6 +4,7 @@ import { sanitizeEmail, isBlockedDomain, isValidAlgerianPhone, getOrCreateUID, g
 
 const WILAYAS = Object.keys(DZ_COMMUNES);
 const DEFAULT_ACCOUNTS: string[] = [];
+const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '') as string;
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const LANGS = {
@@ -401,7 +402,34 @@ export default function App(){
   const [customErr,setCustomErr]=useState('');
   const [verifyingEmail,setVerifyingEmail]=useState('');
   const [savedAccounts,setSavedAccounts]=useState<string[]>(()=>ls<string[]>('sr_accounts',[]));
+  const [googleLoading,setGoogleLoading]=useState(false);
   const allAccounts=[...new Set([...DEFAULT_ACCOUNTS,...savedAccounts])];
+
+  const triggerGoogleLogin=()=>{
+    if(GOOGLE_CLIENT_ID&&window.google?.accounts?.oauth2){
+      setGoogleLoading(true);
+      const client=window.google.accounts.oauth2.initTokenClient({
+        client_id:GOOGLE_CLIENT_ID,
+        scope:'email profile',
+        callback:(response)=>{
+          setGoogleLoading(false);
+          if(response.access_token){
+            fetch('https://www.googleapis.com/oauth2/v2/userinfo',{headers:{Authorization:`Bearer ${response.access_token}`}})
+              .then(r=>r.json())
+              .then((info:{email?:string})=>{if(info.email)selectAccount(info.email);else{setShowModal(true);if(allAccounts.length===0)setAddingAccount(true);}})
+              .catch(()=>{setGoogleLoading(false);setShowModal(true);if(allAccounts.length===0)setAddingAccount(true);});
+          }else{
+            setShowModal(true);
+            if(allAccounts.length===0)setAddingAccount(true);
+          }
+        },
+      });
+      client.requestAccessToken({prompt:'select_account'});
+    }else{
+      setShowModal(true);
+      if(allAccounts.length===0)setAddingAccount(true);
+    }
+  };
 
   const selectAccount=(rawEmail:string)=>{
     const email=sanitizeEmail(rawEmail);
@@ -477,9 +505,14 @@ export default function App(){
           <div style={{color:th.muted,fontSize:14}}>{T.loginSub}</div>
         </div>
         <div style={{background:th.surf,border:`1px solid ${th.border}`,borderRadius:20,padding:24,boxShadow:`0 8px 32px rgba(0,0,0,0.4),0 0 0 1px ${th.acc}11`}}>
-          <button onClick={()=>setShowModal(true)} style={{width:'100%',background:'#ffffff',border:'none',borderRadius:12,padding:'14px 20px',display:'flex',alignItems:'center',justifyContent:'center',gap:10,cursor:'pointer',fontFamily:'inherit',fontWeight:700,fontSize:15,color:'#3c4043',boxShadow:'0 2px 8px rgba(0,0,0,0.3)'}} onMouseEnter={e=>(e.currentTarget.style.boxShadow='0 4px 16px rgba(0,0,0,0.4)')} onMouseLeave={e=>(e.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,0.3)')}>
-            <GoogleG/>{T.loginGoogleBtn}
+          <button onClick={triggerGoogleLogin} disabled={googleLoading} style={{width:'100%',background:'#ffffff',border:'none',borderRadius:12,padding:'14px 20px',display:'flex',alignItems:'center',justifyContent:'center',gap:10,cursor:googleLoading?'not-allowed':'pointer',fontFamily:'inherit',fontWeight:700,fontSize:15,color:'#3c4043',boxShadow:'0 2px 8px rgba(0,0,0,0.3)',opacity:googleLoading?0.8:1,transition:'all .2s'}} onMouseEnter={e=>{if(!googleLoading)e.currentTarget.style.boxShadow='0 4px 16px rgba(0,0,0,0.4)'}} onMouseLeave={e=>{e.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,0.3)'}}>
+            {googleLoading
+              ?<><div style={{width:18,height:18,border:'2px solid #dadce0',borderTop:'2px solid #4285f4',borderRadius:'50%',animation:'spin 0.8s linear infinite',flexShrink:0}}/><span style={{color:'#3c4043'}}>جاري التحقق...</span></>
+              :<><GoogleG/>{T.loginGoogleBtn}</>}
           </button>
+          {!GOOGLE_CLIENT_ID&&<div style={{marginTop:10,background:'#1a1a2e',border:'1px solid #4285f455',borderRadius:9,padding:'8px 12px',fontSize:11,color:'#8ab4f8',lineHeight:1.7,textAlign:'center'}}>
+            💡 لتفعيل تسجيل الدخول الحقيقي عبر Google، أضف متغير <code style={{background:'#ffffff15',borderRadius:4,padding:'1px 5px',fontFamily:'monospace'}}>VITE_GOOGLE_CLIENT_ID</code> في إعدادات المشروع
+          </div>}
         </div>
         <div style={{display:'flex',justifyContent:'center',gap:8,marginTop:20}}>
           {(['ar','fr','en'] as Lang[]).map(l=><button key={l} onClick={()=>{setLang(l);lss('sr_lang',l)}} style={{background:lang===l?th.acc:th.surf,border:`1px solid ${lang===l?th.acc:th.border}`,color:lang===l?'#fff':th.muted,padding:'5px 12px',borderRadius:8,cursor:'pointer',fontFamily:'inherit',fontSize:12,fontWeight:lang===l?700:400}}>{l.toUpperCase()}</button>)}
