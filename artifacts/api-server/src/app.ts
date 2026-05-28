@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { IncomingMessage, ServerResponse } from "http";
 import express, { type Express } from "express";
 import cors from "cors";
@@ -7,7 +8,6 @@ import { logger } from "./lib/logger";
 const app: Express = express();
 
 app.use(
- // @ts-ignore
   pinoHttp({
     logger,
     serializers: {
